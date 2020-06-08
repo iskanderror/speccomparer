@@ -69,6 +69,7 @@ namespace Comparator.Spec
                     int nameOffset = Parameters.NameColumn - Parameters.VendorCodeColumn;
                     int unitOffset = Parameters.UnitColumn - Parameters.VendorCodeColumn;
                     int quantityOffset = Parameters.QuantityColumn - Parameters.VendorCodeColumn;
+                    int positionOffset = Parameters.PositionColumn - Parameters.VendorCodeColumn;
 
                     foreach (var cell in query)
                     {
@@ -77,7 +78,8 @@ namespace Comparator.Spec
                             VendorCode = cell.Value?.ToString() ?? "",
                             Name = cell.Offset(0, nameOffset).Value?.ToString() ?? "",
                             Unit = cell.Offset(0, unitOffset).Value?.ToString() ?? "",
-                            Quantity = float.Parse(cell.Offset(0, quantityOffset).Value?.ToString() ?? "0")
+                            Quantity = float.Parse(cell.Offset(0, quantityOffset).Value?.ToString() ?? "0"),
+                            Position = cell.Offset(0, positionOffset).Value?.ToString() ?? "",
                         };
                         Items.Add(tmpItem);
                     }
@@ -91,7 +93,7 @@ namespace Comparator.Spec
             }
         }
 
-        public void mergeItems()
+        public void MergeDuplicates()
         {
             if (!isLoaded)
             {
@@ -101,10 +103,25 @@ namespace Comparator.Spec
 
             _logger?.Log("Объединяю позиции с одинаковым артикулом... ");
             List<SpecItem> reducedOrderItemList = Items.GroupBy(item => item.VendorCode)
-                .Select(grp => grp.Aggregate(new SpecItem(grp.First()) { Quantity = 0 }, (curItem, nextItem) => { curItem.Quantity += nextItem.Quantity; return curItem; }))
+                .Select(grp => grp.Aggregate(
+                    new SpecItem(grp.First())
+                    {
+                        Quantity = 0, 
+                        Position = "",
+                    },
+                    mergeItems))
                 .ToList();
             Items = reducedOrderItemList;
             _logger?.Log(String.Format("Объединение завершено. Обнаружено {0} уникальных позиций", Items.Count));
         }
+
+        private SpecItem mergeItems(SpecItem curItem, SpecItem nextItem)
+        {
+            curItem.Quantity += nextItem.Quantity;
+            char[] charsToTrim = { ' ', '|'};
+            curItem.Position = String.Format("{0} | {1}", curItem.Position , nextItem.Position).Trim(charsToTrim);
+            return curItem;
+        }
+
     }
 }

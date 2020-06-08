@@ -41,6 +41,7 @@ namespace Comparator
             NameColumn = 4,
             UnitColumn = 5,
             QuantityColumn = 6,
+            PositionColumn = 1,
         };
         readonly SpecFileParameters orderFileParameters = new SpecFileParameters()
         {
@@ -51,6 +52,7 @@ namespace Comparator
             NameColumn = 3,
             UnitColumn = 5,
             QuantityColumn = 4,
+            PositionColumn = 1,
         };
 
         public MainWindow()
@@ -80,7 +82,7 @@ namespace Comparator
         private void buttonGetSpecFromPath_Click(object sender, RoutedEventArgs e)
         {
             specFile.LoadItems();
-            specFile.mergeItems();
+            specFile.MergeDuplicates();
         }
 
         private void buttonGetSpecPath_Click(object sender, RoutedEventArgs e)
@@ -104,7 +106,7 @@ namespace Comparator
         private void buttonGetOrderFromPath_Click(object sender, RoutedEventArgs e)
         {
             orderFile.LoadItems();
-            orderFile.mergeItems();
+            orderFile.MergeDuplicates();
         }
 
         private void buttonCompare_Click(object sender, RoutedEventArgs e)

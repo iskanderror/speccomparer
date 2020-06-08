@@ -14,16 +14,18 @@ namespace Comparator.Spec
         public int NameColumn { get; set; }
         public int UnitColumn { get; set; }
         public int QuantityColumn { get; set; }
+        public int PositionColumn { get; set; }
 
         public SpecFileParameters()
         {
             Worksheet = "";
             FirstRow = 2;
             RowsMaxCount = 999;
-            VendorCodeColumn = 1;
-            NameColumn = 2;
-            UnitColumn = 3;
-            QuantityColumn = 4;
+            VendorCodeColumn = 2;
+            NameColumn = 3;
+            UnitColumn = 4;
+            QuantityColumn = 5;
+            PositionColumn = 1;
         }
     }
 }
