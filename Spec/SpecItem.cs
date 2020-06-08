@@ -10,6 +10,7 @@ namespace Comparator.Spec
         public string Name { get; set; }
         public string Unit { get; set; }
         public float Quantity { get; set; }
+        public string Position { get; set; }
 
         public SpecItem()
         {
@@ -17,6 +18,7 @@ namespace Comparator.Spec
             Name = "";
             Unit = "";
             Quantity = 0;
+            Position = "";
         }
 
         public SpecItem(SpecItem template)
@@ -25,6 +27,7 @@ namespace Comparator.Spec
             Name = template.Name;
             Unit = template.Unit;
             Quantity = template.Quantity;
+            Position = template.Position;
         }
 
         public override string ToString()
